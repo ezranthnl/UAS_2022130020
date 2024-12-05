@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('pegawai', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('jabatan');
+            $table->string('posisi');
             $table->string('gambar')->nullable();
+            $table->unsignedBigInteger('outlet_id');
+            $table->foreign('outlet_id')->references('id')->on('outlets')->onDelete('cascade');
             $table->timestamps();
         });
     }

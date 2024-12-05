@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        {
-            Schema::create('menus', function (Blueprint $table) {
-                $table->id();
-                $table->string('nama');
-                $table->decimal('harga', 10, 2);
-                $table->text('deskripsi')->nullable();
-                $table->string('gambar')->nullable();
-                $table->timestamps();
-            });
-        }
+        Schema::create('menus', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->decimal('harga', 10, 2);
+            $table->text('deskripsi')->nullable();
+            $table->string('gambar')->nullable();
+            $table->unsignedBigInteger('outlet_id'); // Menambahkan kolom outlet_id
+            $table->timestamps();
+
+            // Menambahkan foreign key ke tabel outlets
+            $table->foreign('outlet_id')->references('id')->on('outlets')->onDelete('cascade');
+        });
     }
 
     /**

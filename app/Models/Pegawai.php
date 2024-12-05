@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pegawai extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['nama', 'jabatan', 'gambar'];
-
+    protected $table = 'pegawai'; // Menyesuaikan dengan nama tabel
+    protected $fillable = ['nama', 'posisi', 'gambar', 'outlet_id'];
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class);
+    }
 }

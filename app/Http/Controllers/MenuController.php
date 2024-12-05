@@ -6,14 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Outlet;
 
 
-class OutletController extends Controller
+class MenuController extends Controller
 {
     public function index()
     {
+        // Data dummy outlet
         $outlets = [
-            ['id' => 1, 'nama' => 'Kopi Kisah Manis Abdulrahman Saleh No. 56'],
-            ['id' => 2, 'nama' => 'Kopi Kisah Manis Sunda No. 65'],
-            ['id' => 3, 'nama' => 'Kopi Kisah Manis Dago Ir. H. Djuanda No. 98'],
+            ['id' => 4, 'nama' => 'Kopi Kisah Manis Abdulrahman Saleh No. 56'],
+            ['id' => 5, 'nama' => 'Kopi Kisah Manis Sunda No. 65'],
+            ['id' => 6, 'nama' => 'Kopi Kisah Manis Dago Ir. H. Djuanda No. 98'],
         ];
 
         $outlets = Outlet::paginate(3);
@@ -24,10 +25,7 @@ class OutletController extends Controller
 
     public function show($id)
     {
-        $outlet = Outlet::with('pegawais', 'menus')->findOrFail($id);
-        $pegawais = $outlet->pegawais()->paginate(20);
-        $menus = $outlet->menus;
-        return view('detail-outlet', compact('outlet', 'pegawais', 'menus'));
+
         $data = [
             1 => [
                 'id' => 1,
@@ -86,7 +84,6 @@ class OutletController extends Controller
             ],
         ];
 
-        // Jika data tidak ditemukan
         if (!isset($data[$id])) {
             abort(404, 'Outlet not found');
         }

@@ -19,12 +19,12 @@
 
         /* Ubah warna navbar */
         nav {
-            background-color: #8f4e04; /* Hijau Tua */
+            background-color: #e98b21; /* Hijau Tua */
         }
 
         /* Styling untuk teks di navbar dan elemen lainnya */
         .navbar-brand, .nav-link {
-            color: white; /* Warna teks navbar */
+            color: rgb(255, 255, 255); /* Warna teks navbar */
         }
 
         .navbar-brand:hover, .nav-link:hover {
@@ -54,9 +54,9 @@
 
         /* Styling untuk input box */
         .form-control {
-            background-color: #022C1E; /* Hijau tua lebih gelap */
-            color: #ffffff;
-            border: 1px solid #FFD700; /* Kuning emas */
+            background-color: #ffffff00; /* Hijau tua lebih gelap */
+            color: #000000;
+            border: 1px solid #000000; /* Kuning emas */
         }
 
         .form-control:focus {
@@ -66,9 +66,9 @@
 
         /* Styling untuk dropdown */
         .form-select {
-            background-color: #022C1E;
-            color: #ffffff;
-            border: 1px solid #FFD700;
+            background-color: #ffffff00;
+            color: #000000;
+            border: 1px solid #000000;
         }
 
         .form-select:focus {
@@ -84,6 +84,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <!-- Link Login dan Register di atas -->

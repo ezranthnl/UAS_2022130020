@@ -13,20 +13,25 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('outlet_id');
             $table->integer('nomor_meja');
             $table->string('nama');
-            $table->enum('metode_pembayaran', ['Cash', 'Credit', 'QRIS']);
-            $table->double('total_harga');
+            $table->string('metode_pembayaran');
             $table->timestamps();
+            $table->foreign('outlet_id')->references('id')->on('outlets')->onDelete('cascade');
         });
 
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->string('menu');
+            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('menu_id');
             $table->integer('jumlah');
-            $table->double('harga');
+            $table->decimal('harga', 10, 2);
+            $table->string('nama');
             $table->timestamps();
+
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
         });
     }
 
@@ -36,5 +41,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('order_details');
-        Schema::dropIfExists('orders');    }
+        Schema::dropIfExists('orders');
+    }
 };

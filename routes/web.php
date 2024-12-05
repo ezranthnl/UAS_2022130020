@@ -35,9 +35,14 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/pilih-outlet', [OutletController::class, 'index'])->name('pilih-outlet');
+Route::get('/pegawais', [PegawaiController::class, 'index']);
+
 // Route::get('/outlet/{id}', [OutletController::class, 'show'])->name('detail-outlet');
 Route::get('/outlet/{id}', [OutletController::class, 'show'])->name('detail-outlet');
+Route::get('/menu/{id}', [OutletController::class, 'show'])->name('menu');
+
 Route::get('/order/create/{id}', [OrderController::class, 'create'])->name('order.create');
+Route::post('/order/preview', [OrderController::class, 'preview'])->name('order.preview');
 Route::post('/order/store', [OrderController::class, 'store'])->name('order.store');
 
 
@@ -45,4 +50,3 @@ Route::post('/order/store', [OrderController::class, 'store'])->name('order.stor
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-

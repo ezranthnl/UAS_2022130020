@@ -3,62 +3,76 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Menu;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Outlet;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
     public function create($id)
     {
-        // Data dummy menu untuk outlet
-        $menu = [
-            ['nama' => 'Kopi Hitam', 'harga' => 15000],
-            ['nama' => 'Cappuccino', 'harga' => 25000],
-        ];
-
-        return view('order.create', ['outlet_id' => $id, 'menu' => $menu]);
+        $outlet = Outlet::findOrFail($id);
+        $menus = Menu::where('outlet_id', $id)->get();
+        return view('order.create', compact('outlet', 'menus'));
     }
 
-    public function store(Request $request)
+    public function preview(Request $request)
     {
-        // Validasi input
+        Log::info('Preview Method Called', $request->all());
+
         $validated = $request->validate([
+            'outlet_id' => 'required|exists:outlets,id',
             'nomor_meja' => 'required|integer',
             'nama' => 'required|string|max:255',
             'metode_pembayaran' => 'required|in:Cash,Credit,QRIS',
             'menu' => 'required|array',
-            'menu.*.nama' => 'required|string',
             'menu.*.jumlah' => 'required|integer|min:1',
             'menu.*.harga' => 'required|numeric',
+            'menu.*.nama' => 'required|string|max:255',
         ]);
-
-        // Hitung total harga
-        $total_harga = 0;
-        foreach ($validated['menu'] as $item) {
-            $total_harga += $item['jumlah'] * $item['harga'];
+        $total = 0;
+        foreach ($validated['menu'] as $menuId => $menu) {
+            $total += $menu['harga'] * $menu['jumlah'];
+            $validated['menu'][$menuId]['id'] = $menuId;
         }
 
-        // Masukkan data ke dalam database menggunakan transaksi
-        DB::transaction(function () use ($validated, $total_harga) {
-            // Menyimpan data ke tabel orders
-            $orderId = DB::table('orders')->insertGetId([
-                'nomor_meja' => $validated['nomor_meja'],
-                'nama' => $validated['nama'],
-                'metode_pembayaran' => $validated['metode_pembayaran'],
-                'total_harga' => $total_harga,
+        Log::info('Validated Order Data', $validated);
+        return view('order.preview', ['data' => $validated, 'total' => $total]);
+    }
+
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'outlet_id' => 'required|exists:outlets,id',
+            'nomor_meja' => 'required|integer',
+            'nama' => 'required|string|max:255',
+            'metode_pembayaran' => 'required|in:Cash,Credit,QRIS',
+            'menu' => 'required|array',
+            'menu.*.jumlah' => 'required|integer|min:1',
+            'menu.*.harga' => 'required|numeric',
+            'menu.*.nama' => 'required|string|max:255',
+        ]);
+
+        $order = Order::create([
+            'outlet_id' => $validated['outlet_id'],
+            'nomor_meja' => $validated['nomor_meja'],
+            'nama' => $validated['nama'],
+            'metode_pembayaran' => $validated['metode_pembayaran'],
+        ]);
+
+        foreach ($validated['menu'] as $menuId => $menu) {
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'menu_id' => $menuId,
+                'jumlah' => $menu['jumlah'],
+                'harga' => $menu['harga'],
+                'nama' => $menu['nama'],
             ]);
+        }
 
-            // Menyimpan data menu ke tabel order_details
-            foreach ($validated['menu'] as $item) {
-                DB::table('order_details')->insert([
-                    'order_id' => $orderId,
-                    'menu' => $item['nama'],
-                    'jumlah' => $item['jumlah'],
-                    'harga' => $item['harga'],
-                ]);
-            }
-        });
-
-        // Redirect ke halaman 'Pilih Outlet' dengan pesan sukses
-        return redirect()->route('pilih-outlet')->with('success', 'Pesanan berhasil dibuat!');
+        return redirect()->route('order.create', ['id' => $validated['outlet_id']])->with('success', 'Order berhasil dibuat!');
     }
 }

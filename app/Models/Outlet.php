@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Outlet extends Model
 {
-    use HasFactory;
+    protected $fillable = ['nama', 'alamat', 'gambar'];
+    public function pegawais()
+    {
+        return $this->hasMany(Pegawai::class);
+    }
 
-    protected $table = 'outlets';
-
-    // Menentukan kolom yang bisa diisi
-    protected $fillable = ['nama', 'foto', 'alamat'];  // Kolom yang bisa diisi
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
+    }
 }

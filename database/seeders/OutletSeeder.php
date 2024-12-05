@@ -22,7 +22,7 @@ class OutletSeeder extends Seeder
 
         Outlet::create([
             'nama' => 'Kopi Kisah Manis Sunda No. 65',
-            'foto' => 'storage/app/public/sunda1.jpg',
+            'foto' => 'storage/sunda2.jpg',
             'alamat' => 'Jl. Sunda No. 65',
         ]);
 

@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container mt-5">
+    <div class="position-absolute" style="right: 0%; top: 0%; transform: translateY(0%); width: 0%;">
+        <img src="{{ asset('storage/logo.jpg') }}" class="img-fluid" alt="Logo" style="border-radius: 8px;">
+    </div>
     <h2 class="text-center text-white mb-4">Pilih Outlet</h2>
     <div class="row">
         @foreach ($outlets as $outlet)
@@ -11,12 +14,14 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $outlet->nama }}</h5>
                         <p class="card-text">{{ $outlet->alamat }}</p>
-                        <a href="{{ url('/outlet/' . $outlet->id) }}" class="btn btn-warning">Lihat Menu (ID: {{ $outlet->id }})</a>
+                            <a href="{{ url('/outlet/' . $outlet->id) }}" class="btn btn-warning">Menu</a>
+
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
+
 
     <!-- Pagination -->
     <div class="mt-3 d-flex justify-content-center">
