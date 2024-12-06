@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['outlet_id', 'nomor_meja', 'nama', 'metode_pembayaran'];
+    protected $fillable = ['outlet_id', 'nomor_meja', 'nama', 'metode_pembayaran', 'total_harga'];
 
     public function details()
     {

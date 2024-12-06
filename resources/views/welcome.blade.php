@@ -69,6 +69,7 @@
             <div class="text-center">
                 <a href="{{ route('pilih-outlet') }}" class="btn btn-warning btn-lg">Pilih Outlet</a>
             </div>
+            
         </section>
 
         <!-- Section Gambar Minuman -->

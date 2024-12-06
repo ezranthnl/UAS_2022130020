@@ -38,6 +38,8 @@ class OrderController extends Controller
             $validated['menu'][$menuId]['id'] = $menuId;
         }
 
+
+
         Log::info('Validated Order Data', $validated);
         return view('order.preview', ['data' => $validated, 'total' => $total]);
     }
@@ -46,14 +48,14 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'outlet_id' => 'required|exists:outlets,id',
+            'outlet_id' => 'required|integer',
             'nomor_meja' => 'required|integer',
             'nama' => 'required|string|max:255',
-            'metode_pembayaran' => 'required|in:Cash,Credit,QRIS',
+            'metode_pembayaran' => 'required|string',
             'menu' => 'required|array',
+            'menu.*.id' => 'required|integer',
             'menu.*.jumlah' => 'required|integer|min:1',
-            'menu.*.harga' => 'required|numeric',
-            'menu.*.nama' => 'required|string|max:255',
+            'menu.*.harga' => 'required|integer',
         ]);
 
         $order = Order::create([
@@ -61,15 +63,17 @@ class OrderController extends Controller
             'nomor_meja' => $validated['nomor_meja'],
             'nama' => $validated['nama'],
             'metode_pembayaran' => $validated['metode_pembayaran'],
+            'total_harga' => array_reduce($validated['menu'], function ($carry, $item) {
+                return $carry + ($item['jumlah'] * $item['harga']);
+            }, 0),
         ]);
 
         foreach ($validated['menu'] as $menuId => $menu) {
             OrderDetail::create([
                 'order_id' => $order->id,
-                'menu_id' => $menuId,
+                'menu_id' => $menu['id'],
                 'jumlah' => $menu['jumlah'],
                 'harga' => $menu['harga'],
-                'nama' => $menu['nama'],
             ]);
         }
 

@@ -15,7 +15,7 @@
                         <h5 class="card-title">{{ $outlet->nama }}</h5>
                         <p class="card-text">{{ $outlet->alamat }}</p>
                             <a href="{{ url('/outlet/' . $outlet->id) }}" class="btn btn-warning">Menu</a>
-
+                                <a href="{{ route('reservations.index') }}" class="btn btn-warning btn-lg">Reservasi Meja</a>
                     </div>
                 </div>
             </div>
