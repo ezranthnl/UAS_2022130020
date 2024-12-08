@@ -10,8 +10,9 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\auth\LoginController;
-
+use App\Http\Controllers\MerchandiseSaleController;
 use App\Http\Controllers\auth\RegisterController;
+use App\Http\Controllers\CustomerController;
 
 
 
@@ -50,8 +51,14 @@ Route::get('/menu/{id}', [OutletController::class, 'show'])->name('menu');
 Route::get('/order/create/{id}', [OrderController::class, 'create'])->name('order.create');
 Route::post('/order/preview', [OrderController::class, 'preview'])->name('order.preview');
 Route::post('/order/store', [OrderController::class, 'store'])->name('order.store');
+
 Route::get('/pesan/create', [PesanController::class, 'create'])->name('pesan.create');
 Route::post('/pesan/store', [PesanController::class, 'store'])->name('pesan.store');
+
+Route::get('/merchandise-sales/create', [MerchandiseSaleController::class, 'create'])->name('merchandise-sales.create');
+Route::post('/merchandise-sales', [MerchandiseSaleController::class, 'store'])->name('merchandise-sales.store');
+Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');

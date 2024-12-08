@@ -9,15 +9,16 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['outlet_id', 'nomor_meja', 'nama', 'metode_pembayaran', 'total_harga'];
+    protected $fillable = [
+        'outlet_id',
+        'nomor_meja',
+        'nama_pelanggan',
+        'metode_pembayaran',
+        'total_harga',
+    ];
 
     public function details()
     {
         return $this->hasMany(OrderDetail::class);
-    }
-
-    public function outlet()
-    {
-        return $this->belongsTo(Outlet::class);
     }
 }
