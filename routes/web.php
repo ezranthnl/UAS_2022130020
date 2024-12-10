@@ -13,6 +13,8 @@ use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\MerchandiseSaleController;
 use App\Http\Controllers\auth\RegisterController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminController;
 
 
 
@@ -63,6 +65,21 @@ Route::post('/customers', [CustomerController::class, 'store'])->name('customers
 Route::middleware(['auth'])->group(function () {
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
     Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+
+});
+
+Route::prefix('admin')->group(function () {
+    Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('login', [AdminAuthController::class, 'login']);
+    Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+    Route::middleware(['auth:admin'])->group(function () {
+        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/admin/index', [AdminController::class, 'index'])->name('admin.index');
+        Route::get('/admin/transaksi', [AdminController::class, 'showTransactions'])->name('admin.transaksi');
+        Route::get('/admin/data', [AdminController::class, 'showData'])->name('admin.data');
+    });
+
 });
 
 
